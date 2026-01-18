@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import br.edu.ifpb.instagram.service.impl.UserDetailsServiceImpl;
+import br.edu.ifpb.instagram.unitarios.service.impl.UserDetailsServiceImpl;
 
 
 @Configuration

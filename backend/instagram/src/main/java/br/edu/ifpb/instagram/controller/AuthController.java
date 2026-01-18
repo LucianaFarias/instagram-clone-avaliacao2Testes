@@ -13,7 +13,7 @@ import br.edu.ifpb.instagram.model.request.UserDetailsRequest;
 import br.edu.ifpb.instagram.model.response.LoginResponse;
 import br.edu.ifpb.instagram.model.response.UserDetailsResponse;
 import br.edu.ifpb.instagram.service.UserService;
-import br.edu.ifpb.instagram.service.impl.AuthServiceImpl;
+import br.edu.ifpb.instagram.unitarios.service.impl.AuthServiceImpl;
 
 @RestController
 @RequestMapping("auth")
