@@ -162,9 +162,11 @@ public class UserServiceImplTest {
 void testCreateUser_WhenUsernameAlreadyExists_ThrowsException() {
 
     // -------- ARRANGE --------
+    // Simula que já existe um usuário cadastrado
     when(userRepository.existsByUsername("manu_azevedo"))
             .thenReturn(true);
-
+    
+    // Cria um DTO com os dados do novo usuário
     UserDto newUser = new UserDto(
             null,
             "Manu Azevedo",
@@ -175,10 +177,12 @@ void testCreateUser_WhenUsernameAlreadyExists_ThrowsException() {
     );
 
     // -------- ACT + ASSERT --------
+    // Executa o método createUser e verifica se
+    // uma RuntimeException é lançada
     RuntimeException exception = assertThrows(RuntimeException.class, () -> {
         userService.createUser(newUser);
     });
-
+     // indicando que o username já está em uso
     assertEquals("Username already in use.", exception.getMessage());
 
     // Verifica que o save não foi chamado
@@ -209,14 +213,16 @@ void testCreateUser_WhenUsernameAlreadyExists_ThrowsException() {
 void testDeleteUser_WhenUserDoesNotExist_ThrowsException() {
 
     // -------- ARRANGE --------
-    when(userRepository.existsById(10L))
-            .thenReturn(false);
+    // Simula que NÃO existe um usuário cadastrado
+    when(userRepository.existsById(10L)).thenReturn(false);
 
     // -------- ACT + ASSERT --------
+    // Executa o método deleteUser e verifica se
+    // uma RuntimeException é lançada
     RuntimeException exception = assertThrows(RuntimeException.class, () -> {
         userService.deleteUser(10L);
     });
-
+    // indicando que o usuário não foi encontrado
     assertEquals("User not found with id: 10", exception.getMessage());
 
     // Verifica que delete NÃO foi chamado
