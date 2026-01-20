@@ -1,4 +1,4 @@
-package br.edu.ifpb.instagram.unitarios.service.impl;
+package br.edu.ifpb.instagram.service.impl;
 
 import java.util.ArrayList;
 
