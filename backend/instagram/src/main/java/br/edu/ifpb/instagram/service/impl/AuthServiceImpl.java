@@ -1,4 +1,4 @@
-package br.edu.ifpb.instagram.unitarios.service.impl;
+package br.edu.ifpb.instagram.service.impl;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
