@@ -1,21 +1,20 @@
 package br.edu.ifpb.instagram.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.Optional;
-
+import br.edu.ifpb.instagram.model.entity.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
-import br.edu.ifpb.instagram.model.entity.UserEntity;
+import java.util.Optional;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
 @ActiveProfiles("test")
+@Transactional
 public class UserRepositoryTest {
 
     @Autowired
@@ -25,9 +24,10 @@ public class UserRepositoryTest {
 
     @BeforeEach
     void setup() {
-
+        // Limpa a tabela antes de cada teste
         userRepository.deleteAll();
 
+        // Cria usuário base para os testes
         user = new UserEntity();
         user.setFullName("Rayane Rodrigues");
         user.setEmail("rayane@ifpb.edu.br");
@@ -39,17 +39,15 @@ public class UserRepositoryTest {
     void deveSalvarUsuario() {
         UserEntity salvo = userRepository.save(user);
 
-        assertNotNull(salvo.getId());
+        //assertNotNull(salvo.getId());
         assertTrue(salvo.getId() > 0);
-
     }
 
     @Test
     void deveBuscarPorUsername() {
         userRepository.save(user);
 
-        Optional<UserEntity> resultado =
-                userRepository.findByUsername("rayane");
+        Optional<UserEntity> resultado = userRepository.findByUsername("rayane");
 
         assertTrue(resultado.isPresent());
     }
@@ -58,30 +56,32 @@ public class UserRepositoryTest {
     void deveVerificarExistenciaPorEmail() {
         userRepository.save(user);
 
-        assertTrue(
-                userRepository.existsByEmail("rayane@ifpb.edu.br"));
+        assertTrue(userRepository.existsByEmail("rayane@ifpb.edu.br"));
     }
 
     @Test
     void deveAtualizarParcialmenteUsuario() {
+        // Salva usuário
         UserEntity salvo = userRepository.save(user);
 
+        // Tenta atualizar parcialmente o fullName
         int linhas = userRepository.updatePartialUser(
-                "Novo Nome",
+                "Novo Nome",  // queremos que isso mude
                 null,
                 null,
                 null,
                 salvo.getId()
         );
 
-        assertEquals(1, linhas);
+        assertEquals(1, linhas, "Deve atualizar 1 linha");
 
-        UserEntity userAtualizado =
-                userRepository.findById(salvo.getId())
-                        .orElseThrow();
+        // Busca o usuário atualizado
+        UserEntity userAtualizado = userRepository.findById(salvo.getId())
+                .orElseThrow();
 
-        assertEquals("Novo Nome", userAtualizado.getFullName());
-
+        // Aqui o teste **vai falhar**, mostrando o bug
+        assertEquals("Novo Nome", userAtualizado.getFullName(),
+                "O fullName deveria ter sido atualizado para 'Novo Nome'");
     }
 
     @Test
